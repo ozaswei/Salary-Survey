@@ -91,7 +91,7 @@ Make sure to configure your Google scraping service/API inside <code>SerpScraper
 
 <ul>
   <li>👨‍💻 Developed by: <a href="https://ozaswei.com.np">Ozaswei Bahadur Tamrakar</a></li>
-  <li>🔗 Portfolio: <a href="http://portfolio.test/">portfolio.test</a></li>
+  <li>🔗 Portfolio: <a href="https://ozaswei.com.np/">portfolio.test</a></li>
 </ul>
 
 ---
