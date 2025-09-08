@@ -8,8 +8,15 @@ class SalarySurveyController extends Controller
 {
     public function salarySurveyFrontPage()
     {
-        $results = false;
-        $noJob = false;
-        return view('salarySurvey.salarySurvey', compact('results', 'noJob'));
+        return view('salarySurvey.salarySurvey', [
+            'results'  => false,
+            'noJob'    => false,
+            'job'      => old('job', ''),       // <— default
+            'location' => old('location', ''),  // <— default
+            'highest'  => null,
+            'lowest'   => null,
+            'average'  => null,
+            'topJobs'  => [],
+        ]);
     }
 }
