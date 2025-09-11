@@ -18,7 +18,6 @@
     --accent3:#f59e0b; /* amber */
     --ring:rgba(139,179,255,.38);
     }
-
     @media (prefers-color-scheme: light){
     :root{
     --bg:#f7f9ff;
@@ -38,11 +37,11 @@
     background:var(--bg);
     }
 
-    /* Support if Bootstrap CSS isn’t present */
-    .d-flex{display:flex}
-    .flex-wrap{flex-wrap:wrap}
-    .gap-2{gap:.5rem}
-    .text-primary{color:var(--primary)!important}
+    /* Utility fallbacks if Bootstrap CSS isn’t present */
+    .d-flex{ display:flex }
+    .flex-wrap{ flex-wrap:wrap }
+    .gap-2{ gap:.5rem }
+    .text-primary{ color:var(--primary)!important }
 
     /* ===== Fixed Aurora background (GPU-cheap) ===== */
     .site-bg{position:fixed; inset:0; z-index:-1; pointer-events:none; overflow:hidden}
@@ -60,7 +59,6 @@
     animation-duration:28s;
     mix-blend-mode:screen;
     }
-
     /* tiny noise overlay */
     .site-noise{
     position:fixed; inset:0; z-index:-1; pointer-events:none; opacity:.08;
@@ -68,11 +66,9 @@
     repeating-linear-gradient(0deg, rgba(255,255,255,.08) 0 1px, transparent 1px 2px),
     repeating-linear-gradient(90deg, rgba(255,255,255,.05) 0 1px, transparent 1px 2px);
     }
-
-    /* Aurora motion */
     @keyframes drift{
-    from{ transform: translate3d(-6%,-4%,0) rotate(8deg) scale(1.05); }
-    to { transform: translate3d( 6%, 4%,0) rotate(-8deg) scale(1.1); }
+    from{ transform:translate3d(-6%,-4%,0) rotate(8deg) scale(1.05) }
+    to { transform:translate3d( 6%, 4%,0) rotate(-8deg) scale(1.1) }
     }
 
     /* ===== Container & cards ===== */
@@ -82,10 +78,11 @@
     backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px);
     border-radius:18px; border:1px solid rgba(255,255,255,.08);
     box-shadow:0 12px 36px rgba(0,0,0,.35);
-    overflow:hidden; content-visibility:auto;
+    overflow:visible; /* allow tooltips */
+    content-visibility:auto;
     }
 
-    /* inputs */
+    /* Inputs */
     .form-control{
     min-height:52px; border-radius:14px;
     border:1px solid rgba(255,255,255,.12);
@@ -100,7 +97,7 @@
     background:rgba(14,18,28,1);
     }
 
-    /* buttons */
+    /* Buttons */
     .btn-light{
     font-weight:700; border-radius:14px;
     border:1px solid rgba(255,255,255,.12);
@@ -109,22 +106,20 @@
     .btn-light:hover{ filter:brightness(.98) }
     .btn-primary,.btn-outline-light{ border-radius:12px }
 
-    /* titles */
-    .mainSearchHeading{ font-size:clamp(1.4rem,3.6vw,2.2rem); font-weight:800; letter-spacing:.2px; }
-    .result-card h2{ font-weight:800; letter-spacing:.2px }
+    /* Titles / numbers */
+    .mainSearchHeading{ font-size:clamp(1.4rem,3.6vw,2.2rem); font-weight:800; }
+    .result-card h2{ font-weight:800 }
     .result-card h3{ font-weight:700 }
-
-    /* highlight number */
     .average-pay{
     font-size:clamp(2.2rem,5.5vw,3.2rem); font-weight:800;
     background:linear-gradient(90deg,var(--accent1),var(--accent2),var(--accent3));
     -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;
     }
 
-    /* chart box */
+    /* Chart */
     .chart-container{ position:relative; width:100%; height:clamp(240px,48vw,380px); margin-top:.5rem }
 
-    /* job cards */
+    /* Job cards */
     .job-card{
     background:linear-gradient(180deg,var(--card-2),var(--card));
     color:var(--text);
@@ -138,43 +133,51 @@
     border-color:rgba(139,179,255,.28);
     }
 
-    /* equalize heights + ellipsis */
-    .job-title{ white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:100% }
+    /* Ellipsis only on inner span */
+    .job-title{
+    display:inline-block; max-width:100%;
+    white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+    }
 
-    /* subtle pop-in */
+    /* Custom tooltip on title host (not clipped) */
+    .result-card.top-jobs{ overflow:visible }
+    .has-tip{ position:relative; cursor:help; overflow:visible!important; z-index:2 }
+    .has-tip::after{
+    content:attr(data-tip);
+    position:absolute; left:50%; bottom:100%;
+    transform:translate(-50%,-8px);
+    max-width:min(80vw,520px); width:max-content; min-width:180px;
+    background:rgba(10,12,18,.92); color:#fff;
+    border:1px solid rgba(255,255,255,.12);
+    padding:10px 12px; border-radius:10px;
+    box-shadow:0 10px 30px rgba(0,0,0,.35);
+    pointer-events:none; opacity:0; visibility:hidden;
+    transition:opacity .15s ease, transform .15s ease;
+    white-space:normal; z-index:30;
+    }
+    .has-tip::before{
+    content:""; position:absolute; left:50%; bottom:100%;
+    transform:translate(-50%,2px);
+    border:8px solid transparent; border-top-color:rgba(10,12,18,.92);
+    opacity:0; visibility:hidden; transition:opacity .15s ease, transform .15s ease; z-index:30;
+    }
+    .has-tip:hover::after,.has-tip:hover::before,
+    .has-tip:focus::after,.has-tip:focus::before{
+    opacity:1; visibility:visible; transform:translate(-50%,-12px);
+    }
+
+    /* Appear animation */
     .fade-up{ animation:fadeUp .5s ease both }
     @keyframes fadeUp{ from{transform:translate3d(0,12px,0); opacity:0} to{transform:translate3d(0,0,0); opacity:1} }
 
-    /* responsive grid for Top Jobs */
+    /* Responsive grid for Top Jobs */
     @media (min-width:768px){ .top-jobs .col-md-4{ flex:0 0 33.333%; max-width:33.333% } }
     @media (max-width:767.98px){ .top-jobs .col-md-4{ flex:0 0 50%; max-width:50% } }
     @media (max-width:480px){ .top-jobs .col-md-4{ flex:0 0 100%; max-width:100% } }
 
-    /* accessibility */
+    /* Reduced motion */
     @media (prefers-reduced-motion: reduce){ *{ animation:none!important; transition:none!important } }
-
-    /* Custom tooltip (centered, with arrow, avoids clipping) */
-    .has-tip{ position:relative; cursor:help }
-    .has-tip::after{
-    content:attr(data-tip);
-    position:absolute; left:50%; bottom:100%; transform:translate(-50%,-8px);
-    max-width:min(80vw,520px); width:max-content; min-width:180px;
-    background:rgba(10,12,18,.92); color:#fff;
-    border:1px solid rgba(255,255,255,.12);
-    padding:10px 12px; border-radius:10px; box-shadow:0 10px 30px rgba(0,0,0,.35);
-    pointer-events:none; opacity:0; visibility:hidden;
-    transition:opacity .15s ease, transform .15s ease; white-space:normal; z-index:10;
-    }
-    .has-tip::before{
-    content:""; position:absolute; left:50%; bottom:100%; transform:translate(-50%,2px);
-    border:8px solid transparent; border-top-color:rgba(10,12,18,.92);
-    opacity:0; visibility:hidden; transition:opacity .15s ease, transform .15s ease; z-index:10;
-    }
-    .has-tip:hover::after,.has-tip:hover::before{
-    opacity:1; visibility:visible;
-    }
 @endsection
-
 
 @section('mainBody')
     <div class="site-bg" aria-hidden="true"></div>
@@ -201,7 +204,7 @@
                 </div>
             </form>
 
-            {{-- Badge row (only when values exist) --}}
+            {{-- Optional badge row to echo query (only when values exist) --}}
             @if (($job ?? '') !== '' || ($location ?? '') !== '')
                 <div class="d-flex gap-2 flex-wrap mt-3">
                     @if (($job ?? '') !== '')
@@ -227,7 +230,8 @@
                     How much does a <span class="text-primary">{{ $job }}</span> earn in
                     <span class="text-primary">{{ $location }}</span>?
                 </h2>
-                <p>Between <strong>CAD {{ number_format($lowest) }}</strong> and
+                <p>
+                    Between <strong>CAD {{ number_format($lowest) }}</strong> and
                     <strong>CAD {{ number_format($highest) }}</strong> annually.
                 </p>
                 <div class="average-pay mb-4">CAD {{ number_format($average) }} / Year</div>
@@ -244,14 +248,12 @@
                         @foreach ($topJobs as $item)
                             <div class="col-md-4 mb-3 d-flex">
                                 <div class="card job-card p-3 h-100 w-100">
-                                    <h5 class="mb-2 job-title has-tip" data-tip="{{ $item['title'] }}">
-                                        {{ $item['title'] }}
+                                    <h5 class="mb-2 has-tip" data-tip="{{ $item['title'] }}" tabindex="0">
+                                        <span class="job-title">{{ $item['title'] }}</span>
                                     </h5>
                                     <p class="mb-1 text-white">{{ $item['company'] }}</p>
                                     <a href="{{ $item['link'] }}" target="_blank" rel="noopener"
-                                        class="btn btn-outline-light btn-sm mt-auto">
-                                        View Job
-                                    </a>
+                                        class="btn btn-outline-light btn-sm mt-auto">View Job</a>
                                 </div>
                             </div>
                         @endforeach
@@ -273,9 +275,8 @@
     </div>
 
     @if ($results == true)
-        <script src="https://cdn.jsdelivr.net/npm/chart.js" defer></script>
-        <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2" defer></script>
-
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
         <script>
             (function() {
                 let salaryChartInstance = null;
@@ -285,14 +286,17 @@
                     const canvas = document.getElementById('salaryChart');
                     if (!canvas) return;
 
+                    // Dynamic values from Blade (fallback to 0)
                     const LOW = {{ (int) ($lowest ?? 0) }};
                     const AVG = {{ (int) ($average ?? 0) }};
                     const HIGH = {{ (int) ($highest ?? 0) }};
 
+                    // If all are zero/empty, skip making a chart
                     if ((LOW || AVG || HIGH) === 0) return;
 
                     const ctx = canvas.getContext('2d');
 
+                    // Create gradient that adapts to canvas size
                     function makeGradient() {
                         const g = ctx.createLinearGradient(0, 0, 0, canvas.height);
                         g.addColorStop(0, 'rgba(124,154,255,0.35)');
@@ -406,6 +410,7 @@
                         plugins: (typeof ChartDataLabels !== 'undefined') ? [ChartDataLabels] : []
                     });
 
+                    // Recompute gradient on resize to keep it crisp
                     if (resizeHandler) window.removeEventListener('resize', resizeHandler);
                     resizeHandler = () => {
                         const ds = salaryChartInstance.data.datasets[0];
@@ -415,12 +420,14 @@
                     window.addEventListener('resize', resizeHandler);
                 }
 
+                // Init when DOM is ready
                 if (document.readyState === 'loading') {
                     document.addEventListener('DOMContentLoaded', initSalaryChart);
                 } else {
                     initSalaryChart();
                 }
 
+                // Clean up on page hide (for PJAX/Turbo scenarios)
                 window.addEventListener('pagehide', () => {
                     if (resizeHandler) window.removeEventListener('resize', resizeHandler);
                     if (salaryChartInstance) salaryChartInstance.destroy();
