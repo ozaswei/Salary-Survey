@@ -5,178 +5,6 @@
 @endsection
 
 @section('customStyle')
-    /* ===== Theme ===== */
-    :root{
-    --bg:#0b0f1a;
-    --card:rgba(18,22,33,.72);
-    --card-2:rgba(23,29,44,.82);
-    --text:#eaf0ff;
-    --muted:#98a4c5;
-    --primary:#8bb3ff;
-    --accent1:#a78bfa; /* purple */
-    --accent2:#60a5fa; /* blue */
-    --accent3:#f59e0b; /* amber */
-    --ring:rgba(139,179,255,.38);
-    }
-    @media (prefers-color-scheme: light){
-    :root{
-    --bg:#f7f9ff;
-    --card:rgba(255,255,255,.85);
-    --card-2:rgba(246,248,255,.9);
-    --text:#0f1326;
-    --muted:#445070;
-    --ring:rgba(96,165,250,.45);
-    }
-    }
-
-    /* ===== Page base ===== */
-    html,body{height:100%}
-    body{
-    font-family:'Poppins',system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
-    color:var(--text);
-    background:var(--bg);
-    }
-
-    /* Utility fallbacks if Bootstrap CSS isn’t present */
-    .d-flex{ display:flex }
-    .flex-wrap{ flex-wrap:wrap }
-    .gap-2{ gap:.5rem }
-    .text-primary{ color:var(--primary)!important }
-
-    /* ===== Fixed Aurora background (GPU-cheap) ===== */
-    .site-bg{position:fixed; inset:0; z-index:-1; pointer-events:none; overflow:hidden}
-    .site-bg::before,.site-bg::after{
-    content:""; position:absolute; width:90vmax; height:90vmax; filter:blur(60px);
-    background:
-    radial-gradient(35% 35% at 30% 40%, rgba(96,165,250,.38), transparent 60%),
-    radial-gradient(30% 30% at 70% 60%, rgba(167,139,250,.38), transparent 60%),
-    radial-gradient(25% 25% at 50% 20%, rgba(245,158,11,.22), transparent 60%);
-    transform:translate3d(-10%,-10%,0) rotate(10deg);
-    animation:drift 22s ease-in-out infinite alternate;
-    }
-    .site-bg::after{
-    transform:translate3d(10%,0%,0) rotate(-8deg) scale(1.1);
-    animation-duration:28s;
-    mix-blend-mode:screen;
-    }
-    /* tiny noise overlay */
-    .site-noise{
-    position:fixed; inset:0; z-index:-1; pointer-events:none; opacity:.08;
-    background-image:
-    repeating-linear-gradient(0deg, rgba(255,255,255,.08) 0 1px, transparent 1px 2px),
-    repeating-linear-gradient(90deg, rgba(255,255,255,.05) 0 1px, transparent 1px 2px);
-    }
-    @keyframes drift{
-    from{ transform:translate3d(-6%,-4%,0) rotate(8deg) scale(1.05) }
-    to { transform:translate3d( 6%, 4%,0) rotate(-8deg) scale(1.1) }
-    }
-
-    /* ===== Container & cards ===== */
-    .container{ max-width:1100px; }
-    .result-card,.searchBox{
-    background:linear-gradient(180deg,var(--card),var(--card-2));
-    backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px);
-    border-radius:18px; border:1px solid rgba(255,255,255,.08);
-    box-shadow:0 12px 36px rgba(0,0,0,.35);
-    overflow:visible; /* allow tooltips */
-    content-visibility:auto;
-    }
-
-    /* Inputs */
-    .form-control{
-    min-height:52px; border-radius:14px;
-    border:1px solid rgba(255,255,255,.12);
-    background:rgba(14,18,28,.85);
-    color:var(--text);
-    transition:border-color .18s ease, box-shadow .18s ease, background-color .18s ease;
-    }
-    .form-control::placeholder{ color:#9aa6c7 }
-    .form-control:focus{
-    outline:none; border-color:var(--ring);
-    box-shadow:0 0 0 6px var(--ring);
-    background:rgba(14,18,28,1);
-    }
-
-    /* Buttons */
-    .btn-light{
-    font-weight:700; border-radius:14px;
-    border:1px solid rgba(255,255,255,.12);
-    background:linear-gradient(180deg,#fff,#f1f4ff); color:#111;
-    }
-    .btn-light:hover{ filter:brightness(.98) }
-    .btn-primary,.btn-outline-light{ border-radius:12px }
-
-    /* Titles / numbers */
-    .mainSearchHeading{ font-size:clamp(1.4rem,3.6vw,2.2rem); font-weight:800; }
-    .result-card h2{ font-weight:800 }
-    .result-card h3{ font-weight:700 }
-    .average-pay{
-    font-size:clamp(2.2rem,5.5vw,3.2rem); font-weight:800;
-    background:linear-gradient(90deg,var(--accent1),var(--accent2),var(--accent3));
-    -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;
-    }
-
-    /* Chart */
-    .chart-container{ position:relative; width:100%; height:clamp(240px,48vw,380px); margin-top:.5rem }
-
-    /* Job cards */
-    .job-card{
-    background:linear-gradient(180deg,var(--card-2),var(--card));
-    color:var(--text);
-    transition:transform .22s ease, box-shadow .22s ease, border-color .22s ease;
-    border:1px solid rgba(255,255,255,.06);
-    display:flex; flex-direction:column;
-    }
-    .job-card:hover{
-    transform:translateY(-4px);
-    box-shadow:0 14px 30px rgba(0,0,0,.28);
-    border-color:rgba(139,179,255,.28);
-    }
-
-    /* Ellipsis only on inner span */
-    .job-title{
-    display:inline-block; max-width:100%;
-    white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
-    }
-
-    /* Custom tooltip on title host (not clipped) */
-    .result-card.top-jobs{ overflow:visible }
-    .has-tip{ position:relative; cursor:help; overflow:visible!important; z-index:2 }
-    .has-tip::after{
-    content:attr(data-tip);
-    position:absolute; left:50%; bottom:100%;
-    transform:translate(-50%,-8px);
-    max-width:min(80vw,520px); width:max-content; min-width:180px;
-    background:rgba(10,12,18,.92); color:#fff;
-    border:1px solid rgba(255,255,255,.12);
-    padding:10px 12px; border-radius:10px;
-    box-shadow:0 10px 30px rgba(0,0,0,.35);
-    pointer-events:none; opacity:0; visibility:hidden;
-    transition:opacity .15s ease, transform .15s ease;
-    white-space:normal; z-index:30;
-    }
-    .has-tip::before{
-    content:""; position:absolute; left:50%; bottom:100%;
-    transform:translate(-50%,2px);
-    border:8px solid transparent; border-top-color:rgba(10,12,18,.92);
-    opacity:0; visibility:hidden; transition:opacity .15s ease, transform .15s ease; z-index:30;
-    }
-    .has-tip:hover::after,.has-tip:hover::before,
-    .has-tip:focus::after,.has-tip:focus::before{
-    opacity:1; visibility:visible; transform:translate(-50%,-12px);
-    }
-
-    /* Appear animation */
-    .fade-up{ animation:fadeUp .5s ease both }
-    @keyframes fadeUp{ from{transform:translate3d(0,12px,0); opacity:0} to{transform:translate3d(0,0,0); opacity:1} }
-
-    /* Responsive grid for Top Jobs */
-    @media (min-width:768px){ .top-jobs .col-md-4{ flex:0 0 33.333%; max-width:33.333% } }
-    @media (max-width:767.98px){ .top-jobs .col-md-4{ flex:0 0 50%; max-width:50% } }
-    @media (max-width:480px){ .top-jobs .col-md-4{ flex:0 0 100%; max-width:100% } }
-
-    /* Reduced motion */
-    @media (prefers-reduced-motion: reduce){ *{ animation:none!important; transition:none!important } }
 @endsection
 
 @section('mainBody')
@@ -185,98 +13,32 @@
 
     <div class="container mt-4">
         <!-- Search Form -->
-        <div class="card searchBox mt-4 p-4 fade-up">
-            <h2 class="mainSearchHeading mb-4">Salary Survey</h2>
-            <form method="POST" action="{{ route('runScraper') }}">
-                @csrf
-                <div class="row g-2">
-                    <div class="col-md-5 mb-2">
-                        <input type="text" name="job" class="form-control" placeholder="Job title"
-                            value="{{ old('job', $job ?? '') }}" required>
-                    </div>
-                    <div class="col-md-5 mb-2">
-                        <input type="text" name="location" class="form-control" placeholder="Location"
-                            value="{{ old('location', $location ?? '') }}" required>
-                    </div>
-                    <div class="col-md-2 mb-2">
-                        <button type="submit" class="btn btn-light w-100 h-100">Find</button>
-                    </div>
-                </div>
-            </form>
-
-            {{-- Optional badge row to echo query (only when values exist) --}}
-            @if (($job ?? '') !== '' || ($location ?? '') !== '')
-                <div class="d-flex gap-2 flex-wrap mt-3">
-                    @if (($job ?? '') !== '')
-                        <span class="badge rounded-pill px-3 py-2"
-                            style="background:rgba(96,165,250,.15); color:#cfe1ff; border:1px solid rgba(96,165,250,.25);">
-                            Job: {{ $job }}
-                        </span>
-                    @endif
-                    @if (($location ?? '') !== '')
-                        <span class="badge rounded-pill px-3 py-2"
-                            style="background:rgba(167,139,250,.15); color:#e6ddff; border:1px solid rgba(167,139,250,.25);">
-                            Location: {{ $location }}
-                        </span>
-                    @endif
-                </div>
-            @endif
-        </div>
-
+        @include('salarySurvey.salarySearchForm')
         @if ($results == true)
-            <!-- Salary Card -->
-            <div class="card result-card mt-5 p-4 fade-up">
-                <h2 class="mb-3">
-                    How much does a <span class="text-primary">{{ $job }}</span> earn in
-                    <span class="text-primary">{{ $location }}</span>?
-                </h2>
-                <p>
-                    Between <strong>CAD {{ number_format($lowest) }}</strong> and
-                    <strong>CAD {{ number_format($highest) }}</strong> annually.
-                </p>
-                <div class="average-pay mb-4">CAD {{ number_format($average) }} / Year</div>
-                <div class="chart-container">
-                    <canvas id="salaryChart"></canvas>
+            <div class="row">
+                <div class="col-md-8 col-8 col-lg-8 col-sm-12">
+                    <!-- Salary Display Card -->
+                    @include('salarySurvey.salaryDisplayCard')
+                </div>
+                <div class="col-md-4 col-4 col-lg-4 col-sm-12">
+                    <!-- Top Jobs Found -->
+                    @if (!empty($topJobs) && is_array($topJobs))
+                        @include('salarySurvey.topJobs')
+                    @else
+                        <p>No jobs found for this title:(</p>
+                    @endif
                 </div>
             </div>
-
-            <!-- Top Jobs Found -->
-            @if (!empty($topJobs) && is_array($topJobs))
-                <div class="card result-card mt-4 p-4 fade-up top-jobs">
-                    <h3 class="mb-3">Top 5 Jobs Found</h3>
-                    <div class="row">
-                        @foreach ($topJobs as $item)
-                            <div class="col-md-4 mb-3 d-flex">
-                                <div class="card job-card p-3 h-100 w-100">
-                                    <h5 class="mb-2 has-tip" data-tip="{{ $item['title'] }}" tabindex="0">
-                                        <span class="job-title">{{ $item['title'] }}</span>
-                                    </h5>
-                                    <p class="mb-1 text-white">{{ $item['company'] }}</p>
-                                    <a href="{{ $item['link'] }}" target="_blank" rel="noopener"
-                                        class="btn btn-outline-light btn-sm mt-auto">View Job</a>
-                                </div>
-                            </div>
-                        @endforeach
-                    </div>
-                </div>
-            @endif
         @else
             <!-- Default Info Description -->
-            <div class="card result-card mt-5 p-4 fade-up">
-                <h2 class="mb-3">Welcome to the Salary Survey Tool</h2>
-                <p style="color:white; font-size:20px">Discover real-time salary insights for any job title, anywhere.</p>
-                <p style="color:white">
-                    Simply enter a <b>Job Name</b> and <b>Location</b> to get the lowest, average, and highest salary
-                    ranges—perfect
-                    for career planning, job switching, or salary negotiation.
-                </p>
-            </div>
+            @include('salarySurvey.defaultInfo')
         @endif
     </div>
 
     @if ($results == true)
-        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+       <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
+        <!-- ChartJs scripts -->
         <script>
             (function() {
                 let salaryChartInstance = null;

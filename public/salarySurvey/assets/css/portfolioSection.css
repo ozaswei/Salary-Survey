@@ -1,0 +1,15 @@
+@media (max-width: 768px) {
+  .masonry {
+    column-count: 2;
+  }
+}
+
+@media (max-width: 576px) {
+  .masonry {
+    column-count: 1;
+  }
+}
+
+.masonry div:hover img {
+  transform: scale(1.05);
+}

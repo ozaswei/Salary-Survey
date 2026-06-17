@@ -1,0 +1,353 @@
+/* ===== Theme ===== */
+:root {
+    --bg: #0b0f1a;
+    --card: rgba(18, 22, 33, 0.72);
+    --card-2: rgba(23, 29, 44, 0.82);
+    --text: #eaf0ff;
+    --muted: #98a4c5;
+    --primary: #8bb3ff;
+    --accent1: #a78bfa; /* purple */
+    --accent2: #60a5fa; /* blue */
+    --accent3: #f59e0b; /* amber */
+    --ring: rgba(139, 179, 255, 0.38);
+}
+@media (prefers-color-scheme: light) {
+    :root {
+        --bg: #f7f9ff;
+        --card: rgba(255, 255, 255, 0.85);
+        --card-2: rgba(246, 248, 255, 0.9);
+        --text: #0f1326;
+        --muted: #445070;
+        --ring: rgba(96, 165, 250, 0.45);
+    }
+}
+
+/* ===== Page base ===== */
+html,
+body {
+    height: 100%;
+}
+body {
+    font-family:
+        "Poppins",
+        system-ui,
+        -apple-system,
+        Segoe UI,
+        Roboto,
+        sans-serif;
+    color: var(--text);
+    background: var(--bg);
+}
+
+/* Utility fallbacks if Bootstrap CSS isn’t present */
+.d-flex {
+    display: flex;
+}
+.flex-wrap {
+    flex-wrap: wrap;
+}
+.gap-2 {
+    gap: 0.5rem;
+}
+.text-primary {
+    color: var(--primary) !important;
+}
+
+/* ===== Fixed Aurora background (GPU-cheap) ===== */
+.site-bg {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    overflow: hidden;
+}
+.site-bg::before,
+.site-bg::after {
+    content: "";
+    position: absolute;
+    width: 90vmax;
+    height: 90vmax;
+    filter: blur(60px);
+    background:
+        radial-gradient(
+            35% 35% at 30% 40%,
+            rgba(96, 165, 250, 0.38),
+            transparent 60%
+        ),
+        radial-gradient(
+            30% 30% at 70% 60%,
+            rgba(167, 139, 250, 0.38),
+            transparent 60%
+        ),
+        radial-gradient(
+            25% 25% at 50% 20%,
+            rgba(245, 158, 11, 0.22),
+            transparent 60%
+        );
+    transform: translate3d(-10%, -10%, 0) rotate(10deg);
+    animation: drift 22s ease-in-out infinite alternate;
+}
+.site-bg::after {
+    transform: translate3d(10%, 0%, 0) rotate(-8deg) scale(1.1);
+    animation-duration: 28s;
+    mix-blend-mode: screen;
+}
+/* tiny noise overlay */
+.site-noise {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    opacity: 0.08;
+    background-image:
+        repeating-linear-gradient(
+            0deg,
+            rgba(255, 255, 255, 0.08) 0 1px,
+            transparent 1px 2px
+        ),
+        repeating-linear-gradient(
+            90deg,
+            rgba(255, 255, 255, 0.05) 0 1px,
+            transparent 1px 2px
+        );
+}
+@keyframes drift {
+    from {
+        transform: translate3d(-6%, -4%, 0) rotate(8deg) scale(1.05);
+    }
+    to {
+        transform: translate3d(6%, 4%, 0) rotate(-8deg) scale(1.1);
+    }
+}
+
+/* ===== Container & cards ===== */
+.container {
+    max-width: 1100px;
+}
+.result-card,
+.searchBox {
+    background: linear-gradient(180deg, var(--card), var(--card-2));
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border-radius: 18px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 12px 36px rgba(0, 0, 0, 0.35);
+    overflow: visible; /* allow tooltips */
+    content-visibility: auto;
+}
+
+/* Inputs */
+.form-control {
+    min-height: 52px;
+    border-radius: 14px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    background: rgba(14, 18, 28, 0.85);
+    color: var(--text);
+    transition:
+        border-color 0.18s ease,
+        box-shadow 0.18s ease,
+        background-color 0.18s ease;
+}
+.form-control::placeholder {
+    color: #9aa6c7;
+}
+.form-control:focus {
+    outline: none;
+    border-color: var(--ring);
+    box-shadow: 0 0 0 6px var(--ring);
+    background: rgba(14, 18, 28, 1);
+}
+
+/* Buttons */
+/* light */
+.btn-light {
+    font-weight: 700;
+    border-radius: 14px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    background: linear-gradient(180deg, #fff, #f1f4ff);
+    color: #111;
+}
+.btn-light:hover {
+    filter: brightness(0.98);
+}
+.btn-primary,
+.btn-outline-light {
+    border-radius: 12px;
+}
+
+/* danger */
+.btn-danger {
+    font-weight: 700;
+    border-radius: 14px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+}
+.btn-danger:hover {
+    filter: brightness(0.98);
+}
+.btn-primary,
+.btn-outline-danger {
+    border-radius: 12px;
+}
+
+/* Titles / numbers */
+.mainSearchHeading {
+    font-size: clamp(1.4rem, 3.6vw, 2.2rem);
+    font-weight: 800;
+}
+.result-card h2 {
+    font-weight: 800;
+}
+.result-card h3 {
+    font-weight: 700;
+}
+.average-pay {
+    font-size: clamp(2.2rem, 5.5vw, 3.2rem);
+    font-weight: 800;
+    background: linear-gradient(
+        90deg,
+        var(--accent1),
+        var(--accent2),
+        var(--accent3)
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* Chart */
+.chart-container {
+    position: relative;
+    width: 100%;
+    height: clamp(240px, 48vw, 380px);
+    margin-top: 0.5rem;
+}
+
+/* Job cards */
+.job-card {
+    margin-bottom: 5px;
+    background: transparent;
+    color: var(--text);
+    transition:
+        transform 0.22s ease,
+        box-shadow 0.22s ease,
+        border-color 0.22s ease;
+    /* border: 1px solid rgba(255, 255, 255, 0.06); */
+    display: flex;
+    flex-direction: column;
+}
+/* .job-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 14px 30px rgba(0, 0, 0, 0.28);
+    border-color: rgba(139, 179, 255, 0.28);
+} */
+
+/* Ellipsis only on inner span */
+.job-title {
+    font-size: 16px;
+    display: inline-block;
+    max-width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Custom tooltip on title host (not clipped) */
+.result-card.top-jobs {
+    overflow: visible;
+}
+.has-tip {
+    position: relative;
+    cursor: help;
+    overflow: visible !important;
+    z-index: 2;
+}
+.has-tip::after {
+    content: attr(data-tip);
+    position: absolute;
+    left: 50%;
+    bottom: 100%;
+    transform: translate(-50%, -8px);
+    max-width: min(80vw, 520px);
+    width: max-content;
+    min-width: 180px;
+    background: rgba(10, 12, 18, 0.92);
+    color: #fff;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    padding: 10px 12px;
+    border-radius: 10px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+    pointer-events: none;
+    opacity: 0;
+    visibility: hidden;
+    transition:
+        opacity 0.15s ease,
+        transform 0.15s ease;
+    white-space: normal;
+    z-index: 1000;
+}
+.has-tip::before {
+    content: "";
+    position: absolute;
+    left: 50%;
+    bottom: 100%;
+    transform: translate(-50%, 2px);
+    border: 8px solid transparent;
+    border-top-color: rgba(10, 12, 18, 0.92);
+    opacity: 0;
+    visibility: hidden;
+    transition:
+        opacity 0.15s ease,
+        transform 0.15s ease;
+    z-index: 1000;
+}
+.has-tip:hover::after,
+.has-tip:hover::before,
+.has-tip:focus::after,
+.has-tip:focus::before {
+    opacity: 1;
+    visibility: visible;
+    transform: translate(-50%, -12px);
+}
+
+/* Appear animation */
+.fade-up {
+    animation: fadeUp 0.5s ease both;
+}
+@keyframes fadeUp {
+    from {
+        transform: translate3d(0, 12px, 0);
+        opacity: 0;
+    }
+    to {
+        transform: translate3d(0, 0, 0);
+        opacity: 1;
+    }
+}
+
+/* Responsive grid for Top Jobs */
+@media (min-width: 768px) {
+    .top-jobs .col-md-4 {
+        flex: 0 0 33.333%;
+        max-width: 33.333%;
+    }
+}
+@media (max-width: 767.98px) {
+    .top-jobs .col-md-4 {
+        flex: 0 0 50%;
+        max-width: 50%;
+    }
+}
+@media (max-width: 480px) {
+    .top-jobs .col-md-4 {
+        flex: 0 0 100%;
+        max-width: 100%;
+    }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation: none !important;
+        transition: none !important;
+    }
+}
